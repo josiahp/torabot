@@ -27,7 +27,7 @@ go build .
 ## Building (docker)
 
 ```console
-docker build . -t torabot:$(git describe --exact-match --tags)
+docker build . -t josiahp/torabot:$(git describe --exact-match --tags)
 ```
 
 ## Running (binary)
@@ -45,5 +45,5 @@ docker run -d \
   -e GEMINI_API_KEY \
   --name torabot \
   --mount src=torabot,dst=/data \
-  torabot:latest
+  josiahp/torabot:latest
 ```

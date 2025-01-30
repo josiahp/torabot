@@ -66,18 +66,6 @@ Your responses should be unstructured plain text that contains only your respons
 	for _, option := range options {
 		option(result)
 	}
-	/*
-		history, err := loadHistory()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "loadHistory: %v\n", err)
-		} else {
-			result.chat.History = history
-		} /*
-			for _, record := range result.chat.History {
-				for _, part := range record.Parts {
-					fmt.Println(part)
-				}
-			}*/
 	return result, nil
 }
 

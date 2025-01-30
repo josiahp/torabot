@@ -1,10 +1,7 @@
 name: Build
 
 on:
-  push:
-    branches:
-    - main
-    - feature/ci
+- push
 
 jobs:
   build:
@@ -16,20 +13,10 @@ jobs:
       with:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Docker meta
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: josiahp/torabot
-        tags: |
-          type=ref,event=branch
-          type=sha
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-    - name: Build and push
+    - name: Build
       uses: docker/build-push-action@v6
       with:
         context: .
         push: false
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
