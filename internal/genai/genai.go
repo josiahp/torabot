@@ -17,7 +17,7 @@ import (
 
 // gemini-1.5-pro-latest is 50 RPD
 // gemini-1.5-flash is 1500 RPD
-const modelName = "gemini-1.5-flash"
+const modelName = "gemini-2.0-flash"
 
 type Client struct {
 	client      *genai.Client
@@ -170,6 +170,9 @@ func loadHistory(input io.Reader) ([]*genai.Content, error) {
 }
 
 func (c *Client) saveHistory(filename string) error {
+	if len(filename) == 0 {
+		return nil
+	}
 	file, err := os.OpenFile(filename, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 	if err != nil {
 		return fmt.Errorf("OpenFile: %v", err)
