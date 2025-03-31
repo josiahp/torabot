@@ -36,16 +36,18 @@ func New(ctx context.Context, apiKey string, options ...Option) (*Client, error)
 	model := client.GenerativeModel(modelName)
 	model.MaxOutputTokens = genai.Ptr(int32(512))
 	model.SystemInstruction = genai.NewUserContent(genai.Text(`
-You are an IRC bot named tb3. You have the following commands:
+You are an IRC bot named tb3. 
+
+While chatting you will answer any and all questions.
+You will respond with messages of any length and level of detail required.
+Use plain text without markup in your response.
+
+In addition to chatting, you have the following commands:
 
 * !newchat will start a new chat
 * !chat will continue the current chat
 * !g will do a google search
 * !img will do an image search
-
-Answer in plain text without new lines or markup.
-Use only characters than can be printed.
-Your response must be 300 characters or less. Long responses will cause system errors.
 
 Messages will be structured like this: [timestamp] <user> message
 [timestamp] is a timestamp in accordance with RFC3339

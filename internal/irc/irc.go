@@ -82,11 +82,57 @@ func WithGenAI(genAI GenAI) Option {
 		result, err := genAI.Chat(context.Background(), user, msg)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "genai error: %v", err)
-			c.conn.Privmsg("toraton", fmt.Sprintf("genai error: %v", err))
 			return
 		}
-		if err := c.conn.Privmsg(channel, result); err != nil {
-			fmt.Fprintf(os.Stderr, "irc error: %s: %v", result, err)
+
+		// https://datatracker.ietf.org/doc/html/rfc1459#section-2.3
+		// RFC1459 section 2.3 Messages reads:
+		//   IRC messages are always lines of characters terminated with a CR-LF
+		//   (Carriage Return - Line Feed) pair, and these messages shall not
+		//   exceed 512 characters in length, counting all characters including
+		//   the trailing CR-LF. Thus, there are 510 characters maximum allowed
+		//   for the command and its parameters.
+		// So we need to limit the size of our messages. I'm not sure how long the
+		// parameters might be but it includes the server and channel so it could be
+		// quite long. I could calculate but let's just say we have around 400 bytes.
+
+		const maxMessageLength = 400
+		var builder strings.Builder
+		builder.Grow(maxMessageLength)
+		for _, r := range result {
+			endOfChunk := false
+
+			switch r {
+			case '\x00':
+			case '\r':
+			case '\n':
+				endOfChunk = true
+			default:
+				_, err := builder.WriteRune(r)
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "string builder error: %s: %v", builder.String(), err)
+					return
+				}
+			}
+
+			if builder.Len() >= maxMessageLength {
+				endOfChunk = true
+			}
+			if !endOfChunk || builder.Len() == 0 {
+				continue
+			}
+
+			finalString := builder.String()
+
+			if err := c.conn.Privmsg(channel, finalString); err != nil {
+				fmt.Fprintf(os.Stderr, "irc error: %s: %v", finalString, err)
+				return
+			}
+			builder.Reset()
+		}
+		// Send last chunk
+		if err := c.conn.Privmsg(channel, builder.String()); err != nil {
+			fmt.Fprintf(os.Stderr, "irc error: %s: %v", builder.String(), err)
 			return
 		}
 	}
