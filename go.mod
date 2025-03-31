@@ -1,6 +1,6 @@
 module codelove.org/torabot
 
-go 1.23.3
+go 1.24.0
 
 require (
 	github.com/ergochat/irc-go v0.4.0
