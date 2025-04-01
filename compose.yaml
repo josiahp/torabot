@@ -1,0 +1,12 @@
+services:
+    tb3:
+      build: .
+      environment:
+          GEMINI_API_KEY: ${GEMINI_API_KEY}
+          SEARCH_API_KEY: ${SEARCH_API_KEY}
+          SEARCH_ID: ${SEARCH_ID}
+      volumes:
+      - torabot:/data
+
+volumes:
+    torabot:

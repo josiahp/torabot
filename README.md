@@ -47,3 +47,11 @@ docker run -d \
   --mount src=torabot,dst=/data \
   josiahp/torabot:latest
 ```
+
+## Running (docker compose)
+
+Running with docker compose builds the image locally by default.
+
+```console
+docker compose up -d
+```
