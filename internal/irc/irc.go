@@ -144,6 +144,8 @@ func WithGenAI(genAI GenAI) Option {
 				chat(c, e.Params[0], e.Nick(), trimmed)
 			} else if trimmed, found := strings.CutPrefix(e.Params[1], "!chat"); found {
 				chat(c, e.Params[0], e.Nick(), trimmed)
+			} else if trimmed, found := strings.CutPrefix(e.Params[1], "tb3:"); found {
+				chat(c, e.Params[0], e.Nick(), trimmed)
 			}
 		})
 	}
