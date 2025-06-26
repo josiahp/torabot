@@ -1,4 +1,5 @@
-FROM golang:1.24.1-alpine AS builder
+ARG GO_VERSION
+FROM golang:${GO_VERSION}-alpine AS builder
 
 RUN apk update
 
@@ -9,7 +10,7 @@ ENV GOCACHE=/go/cache
 RUN --mount=type=cache,target=/go/cache \
     go build -o /go/bin/torabot
 
-FROM golang:1.24.1-alpine AS runner
+FROM golang:${GO_VERSION}-alpine AS runner
 
 WORKDIR /data
 

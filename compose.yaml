@@ -1,6 +1,9 @@
 services:
     tb3:
-      build: .
+      build:
+        context: .
+        args:
+          GO_VERSION: ${GO_VERSION}
       environment:
           GEMINI_API_KEY: ${GEMINI_API_KEY}
           SEARCH_API_KEY: ${SEARCH_API_KEY}
