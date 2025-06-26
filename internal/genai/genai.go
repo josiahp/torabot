@@ -32,7 +32,7 @@ func New(ctx context.Context, apiKey string, options ...Option) (*Client, error)
 		return nil, fmt.Errorf("unable to create client: %v", err)
 	}
 	config := &genai.GenerateContentConfig{
-		MaxOutputTokens: genai.Ptr(int32(512)),
+		MaxOutputTokens: int32(512),
 		Tools: []*genai.Tool{
 			{GoogleSearch: &genai.GoogleSearch{}},
 		},
