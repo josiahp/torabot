@@ -35,6 +35,7 @@ func New(ctx context.Context, apiKey string, options ...Option) (*Client, error)
 		MaxOutputTokens: int32(512),
 		Tools: []*genai.Tool{
 			{GoogleSearch: &genai.GoogleSearch{}},
+			{URLContext: &genai.URLContext{}},
 		},
 		SystemInstruction: &genai.Content{Parts: []*genai.Part{{Text: `
 You are an IRC bot named tb3. 
@@ -55,13 +56,15 @@ Messages will be structured like this: [timestamp] <user> message
 <user> is the nick of the speaker
 The nick may also be referred to as username or name.
 
+You are using Google Gemini 2.5 Flash as your AI model.
+
 Preserve the capitalization of user names.
 You have full access to the chat history including timestamps and user names.
 Address users by name when responding to them.
 
 Your responses should be unstructured plain text that contains only your response.`},
 		}}}
-	chat, err := client.Chats.Create(ctx, modelName, config, nil)
+	chat, err := client.Chats.Create(ctx, modelName, config, []*genai.Content{})
 	if err != nil {
 		return nil, fmt.Errorf("unable to create chat: %v", err)
 	}
