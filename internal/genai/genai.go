@@ -13,7 +13,7 @@ import (
 
 // gemini-1.5-pro-latest is 50 RPD
 // gemini-1.5-flash is 1500 RPD
-const modelName = "gemini-2.0-flash"
+const modelName = "gemini-2.5-flash"
 
 type Client struct {
 	client         *genai.Client
